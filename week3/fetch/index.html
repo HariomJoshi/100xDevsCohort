@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button onclick="getData()">click here</button>
+  </body>
+  <script>
+    // function getData() {
+    //   //   alert("Clicked");
+    //   fetch("https://fakerapi.it/api/v1/persons").then((res) => {
+    //     console.log(res);
+    //     res.json().then((final) => {
+    //       console.log(final);
+    //     });
+    //   });
+    // }
+
+    // another way to write above function is
+    async function getData() {
+      const data = await fetch("https://fakerapi.it/api/v1/persons");
+      const finaldata = await data.json();
+      console.log(finaldata);
+    }
+  </script>
+</html>

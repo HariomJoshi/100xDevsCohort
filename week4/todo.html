@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>TO DO APP</h1>
+    <input type="text" class="task" id="title" placeholder="Title"></input>
+    <br>
+    <input type="text" class="task" id="description"  placeholder="description"></input>
+    <br>
+    <button onclick=addTodo()>Add todo</button>
+
+    <div id="contents">
+        <!-- here we have to add our elements -->
+    </div>
+</body>
+<script>
+    let global = 0;
+    function addTodo(){
+        const title = document.getElementById("title").value;
+        const description = document.getElementById("description").value;
+        
+        let newElement = document.createElement("h3");
+        newElement.textContent = title;
+
+        document.getElementById("contents").appendChild(newElement);
+        newElement = document.createElement("p");
+        newElement.textContent = description;
+        document.getElementById("contents").appendChild(newElement);
+        newElement = document.createElement("button");
+        newElement.textContent = "Mark as Done";
+        newElement.id = `doneButton${global}`;
+        newElement.addEventListener(`click`, ()=>{
+            document.getElementById("doneButton1").textContent = "done";
+        })
+        document.getElementById("contents").appendChild(newElement);
+
+
+    }
+</script>
+</html>

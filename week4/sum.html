@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input id="firstNumber" type="text" placeholder="Number1" oninput=debounceSumNo()></input>
+    <br>
+    <input id = "secondNumber" type="text" placeholder="Number2" oninput=debounceSumNo()></input>
+    <br>
+    <button onclick=throttleSumNo()>calculate sum</button>
+    <p id="displaysum"></p>
+</body>
+<script>
+    // script tag lets you write js at the webpage
+    let timeout;
+    async function debounceSumNo(){
+        // here is the logic of debounce
+        // call the logic after the given time --> setTImeout
+        // if while the clock is not complete the function gets called so destroy the old clock
+        // and call the function again after the give time
+        // in this way the function will not be called untill there is no function call for 
+        // the given time interval (1000 ms here)
+
+        // now if an existing clock exists, so we have to clear it
+        // how do we clear it
+        // clear timeout
+        clearTimeout(timeout);
+        // setTimeout function returns the id of the clock
+        // if we call the clearTimout function with the id of the clock so the clock gets rejected/destroyed/cancelled etc
+
+
+        // the following function creates a clock for the given milliseconds
+        timeout = setTimeout(function(){
+            sumNo();
+        }, 1000)
+
+    }
+
+
+    // now we want to see the example of throttling
+    // throttling -> limits the execution of your code to once in every specified time interval 
+    let isTimeOut = false;
+    function throttleSumNo(){
+        if(isTimeOut){
+            return;
+        }
+        setTimeout(()=>{
+            sumNo();
+            isTimeOut = false;
+
+        }, 4000);
+        isTimeOut = true;
+    }
+
+
+    async function sumNo(){
+        console.log("function sumNo called! ");
+        const num1 = document.getElementById("firstNumber").value;
+        const num2 = document.getElementById("secondNumber").value;
+        // document.getElementById("displaysum").innerHTML = `The sum is ${parseInt(num1)+parseInt(num2)}`;
+        // here we are perfoming the logic in the frontend, but ideally we don't want to do this in the frotend because of multitute of reasons, one of them being algorithm secrecy
+        // so we have to send data to BE, get value and display it
+        
+        const a = await fetch(`http://localhost:3000/sum?a=${num1}&b=${num2}`);
+        // console.log(a);
+        // you cannot use a directly, you have to tell it what type of data you are recieving
+        // this is how fetch is written
+
+        const ans = await a.text();
+        // a.text().then(function(ans){
+        //     console.log(ans);
+        // });
+        document.getElementById("displaysum").innerHTML = ans;
+
+    }
+
+    
+
+</script>
+</html>
