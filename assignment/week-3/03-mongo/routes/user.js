@@ -13,31 +13,50 @@ router.post("/signup", async (req, res) => {
   if (existing) {
     return res.status(411).send("User already created");
   }
-  const user = new User({
+  await User.create({
     username: username,
     password: password,
   });
-  user.save();
   res.json({
     message: "User created successfully",
   });
 });
 
-router.get("/courses", (req, res) => {
+// notice that there is no middleware here, i.e. everyone  can hit this endpoint
+router.get("/courses", async (req, res) => {
   // Implement listing all courses logic
+  const response = await User.find({});
+  res.json({
+    response,
+  });
 });
 
 router.post("/courses/:courseId", userMiddleware, async (req, res) => {
   // Implement course purchase logic
   const username = req.headers.username;
-  const password = req.headers.password;
+  // query is different, params are different
+  // query -> after question mark and colons
+  // params -> after backslash looks just like route
   const courseId = req.params.courseId;
-  const course = await Course.findOne({ courseId: courseId });
-  const user = await User.findOne({
-    username: username,
-    password: password,
-  });
-  user.purchasedCourses.push(course);
+  // don't forget to do input validation here with the help of zod
+  // const user = await User.findOne({
+  //   username: username,
+  // });
+  // console.log(user);
+  try {
+    await User.updateOne(
+      {
+        username: username,
+      },
+      {
+        $push: { purchasedCourses: courseId },
+        // this syntax is used to push to a particular array in the database
+      }
+    );
+  } catch (e) {
+    console.log(e);
+  }
+
   res.status(200).json({
     msg: "Course Purchased successfully",
   });
@@ -45,14 +64,26 @@ router.post("/courses/:courseId", userMiddleware, async (req, res) => {
 
 router.get("/purchasedCourses", userMiddleware, async (req, res) => {
   // Implement fetching purchased courses logic
-  const username = req.header.username;
-  const password = req.header.passoword;
-  const courses = await User.findOne({
+  const username = req.headers.username;
+  const findUser = await User.findOne({
     username: username,
-    password: password,
   });
-  return res.status(200).json({
-    purchasedCourses: courses,
+  // now that we have the user
+  console.log(findUser.purchasedCourses);
+
+  // we have to find all the courses to which array --> findUser.purchasedCourses have reference to
+  const courses = await Course.find({
+    _id: {
+      $in: findUser.purchasedCourses,
+    },
+    // this will give us all the courses which we have stored reference to
+    // if one reference is stored more than once so it will return it only once
+  });
+  // you can see that we are getting the object ids of the courses bought by the above user here
+
+  res.status(200).json({
+    // purchasedCourses: courses,
+    courses: courses,
   });
 });
 
