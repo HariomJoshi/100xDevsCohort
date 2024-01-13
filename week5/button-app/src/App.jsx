@@ -20,12 +20,15 @@ function App() {
     },
   ]);
   // this is our initial state
-
+  const addTodo = ()=>{
+    
+  }
   return (
     <div>
-      <input placeholder="Title"></input>
+      <input placeholder="Title" id="title"></input>
       <br></br>
-      <input placeholder="description"></input>
+      <input placeholder="description" id="description"></input>
+      <button onClick={addTodo}></button>
       {todos.map((oneEntry) => {
         return (
           <Todo
