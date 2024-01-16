@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
 const userSchema = require("./model/user");
 const todoSchema = require("./model/todo");
-mongoose.connect("");
+mongoose.connect(
+  "mongodb+srv://hariom:QMD1kCUoqWsYTlPc@courses.omtqa6o.mongodb.net/todo_app"
+);
 
 const User = mongoose.model("User", userSchema);
 const Todo = mongoose.model("Todo", todoSchema);

@@ -5,12 +5,14 @@ const userMiddleware = require("../middlewares/userMiddleware");
 const router = Router();
 
 // return all the todos of a particular user
-router.get("/todos", userMiddleware, async (req, res) => {
-  let username = req.headers.name;
+// removing userMiddleware for now for testing purpose
+router.get("/todos", async (req, res) => {
+  // let username = req.headers.name;
+  let username = "hariom123";
   const user = await User.findOne({
     username,
   });
-  console.log(user.todos);
+  // console.log(user.todos);
 
   if (user) {
     try {
@@ -38,7 +40,8 @@ router.get("/todos", userMiddleware, async (req, res) => {
 });
 
 // the following is the logic to add the todo to the list
-router.post("/todos", userMiddleware, async (req, res) => {
+// removing middleware for now because not sending jwt
+router.post("/todos", async (req, res) => {
   const title = req.body.title;
   const description = req.body.description;
   const { _id } = await Todo.create({
@@ -47,7 +50,8 @@ router.post("/todos", userMiddleware, async (req, res) => {
     completed: false,
   });
   // console.log(_id);
-  const username = req.headers.name;
+  // const username = req.headers.name;
+  const username = "hariom123";
   // console.log(username);
   try {
     await User.updateOne(

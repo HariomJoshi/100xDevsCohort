@@ -8,8 +8,16 @@ const {
   loginMiddleware,
   signupMiddleware,
 } = require("./middlewares/login-signup");
+const cors = require("cors");
 app.use(express.json());
-
+// below use allows all the frontend to hit the backend
+// app.use(
+//   cors({
+//     origin: "http://localhost:3000",
+//   })
+// );
+// below use of cors allow all the frontend to hit the backend
+app.use(cors());
 app.use("/user", todoRouter);
 
 app.get("/login", loginMiddleware, (req, res) => {

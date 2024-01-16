@@ -31,7 +31,7 @@ router.get("/courses", async (req, res) => {
   });
 });
 
-router.post("/courses/:courseId", userMiddleware, async (req, res) => {
+router.post("/cxourses/:courseId", userMiddleware, async (req, res) => {
   // Implement course purchase logic
   const username = req.headers.username;
   // query is different, params are different
@@ -49,7 +49,6 @@ router.post("/courses/:courseId", userMiddleware, async (req, res) => {
         username: username,
       },
       {
-        $push: { purchasedCourses: courseId },
         // this syntax is used to push to a particular array in the database
       }
     );
